@@ -1,0 +1,8 @@
+version: "3.7"
+services:
+  imageapi:
+    image: imageapi:latest
+    volumes:
+      - /home/itxbro/imageapi/test:/uploads
+    ports:
+      - "3000:3000"

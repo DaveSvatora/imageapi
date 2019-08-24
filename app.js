@@ -2,6 +2,8 @@ const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const testFolder = './uploads/';
+const fs = require('fs');
 const app = express();
 
 app.use(bodyParser.json());
@@ -19,24 +21,41 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 //cors
-const whitelist = ['http://localhost:8080', 'http://localhost:3000'];
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
+// const whitelist = ['http://192.168.1.2:3000','http://192.168.1.2:8080','http://localhost:8080'];
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error('Not allowed by CORS'));
+//     }
+//   }
+// };
 
 // ROUTES
 app.get('/', function (req, res) {
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/all', function (req, res) {
+  const filenames = [];
+  fs.readdirSync(testFolder).forEach(file => {
+    console.log(file);
+    filenames.push({
+      "file": file,
+      "url": "http://192.168.1.2:3000/image/" + file
+    });
+  });
+  res.json(JSON.stringify(filenames));
+});
+
+app.get("/image/:image", (req, res) => {
+  console.log(req.params.image);
+  res.sendFile(__dirname + "/uploads/" + req.params.image);
+});
+
 //Uploading multiple files
-app.post('/uploadmultiple', cors(corsOptions), upload.array('pics'), (req, res, next) => {
+app.post('/uploadmultiple', upload.array('pics'), (req, res, next) => {
   const files = req.files
   if (!files) {
     const error = new Error('Please choose files')

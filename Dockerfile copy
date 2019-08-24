@@ -1,0 +1,10 @@
+FROM node:10
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm ci --only=production
+COPY . .
+VOLUME /uploads
+EXPOSE 3000
+CMD [ "node", "app.js" ]
+
+# docker build -t imageapi:latest --force-rm .
