@@ -1,6 +1,6 @@
 const express = require('express');
 const multer = require('multer');
-const cors = require('cors');
+// const cors = require('cors');
 const bodyParser = require('body-parser');
 const testFolder = './uploads/';
 const fs = require('fs');
@@ -9,7 +9,6 @@ const app = express();
 app.use(bodyParser.json());
 
 //multer
-// SET STORAGE
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'uploads');
@@ -50,7 +49,6 @@ app.get('/all', function (req, res) {
 });
 
 app.get("/image/:image", (req, res) => {
-  console.log(req.params.image);
   res.sendFile(__dirname + "/uploads/" + req.params.image);
 });
 
