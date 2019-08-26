@@ -14,7 +14,7 @@ or
 docker build -t imageapi:latest --force-rm .
 ```
 
-# RUN
+## RUN
 
 ```
 npm start
@@ -24,4 +24,16 @@ or
 
 ```
 docker stack deploy -c stack.yml imagepai
+```
+
+## Stop
+
+```
+ctrl + 'c'
+```
+
+or 
+
+```
+docker stack rm imageapi
 ```

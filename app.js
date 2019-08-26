@@ -45,10 +45,12 @@ app.get('/all', function (req, res) {
       "url": "http://192.168.1.2:3000/image/" + file
     });
   });
+  res.header('Access-Control-Allow-Origin', '*');
   res.json(JSON.stringify(filenames));
 });
 
 app.get("/image/:image", (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*');
   res.sendFile(__dirname + "/uploads/" + req.params.image);
 });
 
@@ -60,6 +62,7 @@ app.post('/uploadmultiple', upload.array('pics'), (req, res, next) => {
     error.httpStatusCode = 400
     return next(error)
   }
+  res.header('Access-Control-Allow-Origin', '*');
   res.send(files)
 });
 
