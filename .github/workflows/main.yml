@@ -4,10 +4,10 @@ on: [push]
 
 jobs:
   build:
-
+ 
     runs-on: ubuntu-latest
-    
+ 
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
-      run: npm i
+    - name: Build the Docker image
+      run: docker build -t imageapi:latest --force-rm .
