@@ -1,10 +1,12 @@
 const express = require('express');
+const path = require('path');
 const multer = require('multer');
-// const cors = require('cors');
 const bodyParser = require('body-parser');
-const testFolder = './uploads/';
 const fs = require('fs');
-const app = express();
+const testFolder = './uploads/';
+const app = express(),
+            DIST_DIR = __dirname,
+            HTML_FILE = path.join(DIST_DIR, 'index.html');
 
 app.use(bodyParser.json());
 
@@ -19,21 +21,9 @@ var storage = multer.diskStorage({
 })
 var upload = multer({ storage: storage })
 
-//cors
-// const whitelist = ['http://192.168.1.2:3000','http://192.168.1.2:8080','http://localhost:8080'];
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error('Not allowed by CORS'));
-//     }
-//   }
-// };
-
 // ROUTES
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(HTML_FILE);
 });
 
 app.get('/all', function (req, res) {
@@ -42,7 +32,7 @@ app.get('/all', function (req, res) {
     console.log(file);
     filenames.push({
       "file": file,
-      "url": "http://192.168.1.2:3000/image/" + file
+      "url": "http://192.168.1.2:8080/image/" + file
     });
   });
   res.header('Access-Control-Allow-Origin', '*');
@@ -66,6 +56,8 @@ app.post('/uploadmultiple', upload.array('pics'), (req, res, next) => {
   res.send(files)
 });
 
-app.listen(3000, function () {
-  console.log("Working on port 3000");
+const PORT = process.env.PORT || 8080
+app.listen(PORT, () => {
+    console.log(`App listening to ${PORT}....`)
+    console.log('Press Ctrl+C to quit.')
 });
