@@ -3,6 +3,6 @@ services:
   imageapi:
     image: imageapi:latest
     volumes:
-      - /home/itxbro/imageapi/test:/uploads
+      - /home/itxbro/imageapi/test:/uploads:Z
     ports:
       - "8080:8080"

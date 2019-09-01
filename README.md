@@ -37,3 +37,7 @@ or
 ```
 docker stack rm imageapi
 ```
+
+## Todo
+
+https://help.github.com/en/articles/configuring-docker-for-use-with-github-package-registry
