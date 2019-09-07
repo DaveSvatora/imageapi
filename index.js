@@ -3,6 +3,7 @@ const path = require('path');
 const multer = require('multer');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const resize = require('./resize');
 
 const app = express(),
   DIST_DIR = __dirname,
@@ -44,10 +45,12 @@ app.get('/all', function (req, res) {
       console.log(dir + "/" + file);
       fs.readdirSync(dir + "/" + file).forEach(sub => {
         console.log("pushing: " + dir + "/" + file + "/"+ sub);
-        filenames.push({
-          "file": file,
-          "url": "http://192.168.1.2:8080/" + dir + "/" + file + "/"+ sub
-        });
+        filenames.push(
+          {
+            "file": file,
+            "url": "http://192.168.1.2:8080/" + dir + "/" + file + "/"+ sub
+          }
+        );
       });
     }
   });
@@ -58,7 +61,9 @@ app.get('/all', function (req, res) {
 app.get("/uploads/:date/:image", (req, res) => {
   console.log(req.params.date + '/' + req.params.image);
   res.header('Access-Control-Allow-Origin', '*');
-  res.sendFile(__dirname + "/uploads/" + req.params.date + '/' + req.params.image);
+  res.type('image/png');
+  resize(__dirname + "/uploads/" + req.params.date + '/' + req.params.image).pipe(res);
+  // res.sendFile(__dirname + "/uploads/" + req.params.date + '/' + req.params.image);
 });
 
 //Uploading multiple files
