@@ -5,42 +5,66 @@ const full = 'full'
 const host = 'http://192.168.1.2:8080'
 
 module.exports = function getAllFiles() {
-    const years = []
-    const months = []
-    const days = []
-    const filenames = []
+
+    let years = []
+
     fs.readdirSync(dir).forEach(year => {
-        years.push(
-            {
-                year: year,
-                months: months
-            }
-        )
-        fs.readdirSync(path.join(dir, year)).forEach(month => {
-            months.push(
-                {
-                    month: month,
-                    days: days
-                }
-            )
-            fs.readdirSync(path.join(dir, year, month)).forEach(day => {
-                days.push(
+        let months = []
+        let writeYear = true
+        let stat = fs.statSync(path.join(dir, year));
+        if (stat.isDirectory()) {
+            if (writeYear) {
+                years.push(
                     {
-                        day: day,
-                        filenames: filenames
+                        year: year,
+                        months: months
                     }
                 )
-                fs.readdirSync(path.join(dir, year, month, day)).forEach(file => {
-                    filenames.push(
-                        {
-                            file: file,
-                            url: host+'/'+dir+'/'+year+'/'+month+'/'+day+'/'+file,
-                            fullUrl: host+'/'+full+'/'+year+'/'+month+'/'+day+'/'+file
+                writeYear = false;
+            }
+            fs.readdirSync(path.join(dir, year)).forEach(month => {
+                let days = []
+                let writeMonth = true
+                let stat = fs.statSync(path.join(dir, year, month));
+                if (stat.isDirectory()) {
+                    if (writeMonth) {
+                        months.push(
+                            {
+                                month: month,
+                                days: days
+                            }
+                        )
+                        writeMonth = false
+                    }
+                    fs.readdirSync(path.join(dir, year, month)).forEach(day => {
+                        let filenames = []
+                        let writeDay = true
+                        let stat = fs.statSync(path.join(dir, year, month, day));
+                        if (stat.isDirectory()) {
+                            if (writeDay) {
+                                days.push(
+                                    {
+                                        day: day,
+                                        filenames: filenames
+                                    }
+                                )
+                                writeDay = false
+                            }
+                            fs.readdirSync(path.join(dir, year, month, day)).forEach(file => {
+                                console.log("pushing: " + host + '/' + dir + '/' + year + '/' + month + '/' + day + '/' + file)
+                                filenames.push(
+                                    {
+                                        file: file,
+                                        url: host + '/' + dir + '/' + year + '/' + month + '/' + day + '/' + file,
+                                        fullUrl: host + '/' + full + '/' + year + '/' + month + '/' + day + '/' + file
+                                    }
+                                )
+                            })
                         }
-                    )
-                })
+                    })
+                }
             })
-        })
+        }
     })
     return years
 }
