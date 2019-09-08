@@ -2,7 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const dir = 'uploads'
 const full = 'full'
-const host = 'http://192.168.1.2:8080/'
+const host = 'http://192.168.1.2:8080'
 
 module.exports = function getAllFiles() {
     const years = []
@@ -34,8 +34,8 @@ module.exports = function getAllFiles() {
                     filenames.push(
                         {
                             file: file,
-                            url: path.join(host, dir, year, month, day, file),
-                            fullUrl: path.join(host, full, year, month, day, file)
+                            url: host+'/'+dir+'/'+year+'/'+month+'/'+day+'/'+file,
+                            fullUrl: host+'/'+full+'/'+year+'/'+month+'/'+day+'/'+file
                         }
                     )
                 })

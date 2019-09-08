@@ -38,8 +38,8 @@ app.get('/', function (req, res) {
   Get a json map of all the pictures
 */
 app.get('/all', function (req, res) {
-  const data = getAllFiles()
   res.header('Access-Control-Allow-Origin', '*')
+  const data = getAllFiles()
   res.json(JSON.stringify(data))
 })
 
@@ -48,7 +48,7 @@ app.get('/all', function (req, res) {
 */
 app.get('/uploads/:year/:month/:day/:image', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*')
-  res.type('image/png')
+  // res.type('image/png')
   resize(path.join(__dirname, dir, req.params.year, req.params.month, req.params.day, req.params.image)).pipe(res)
 })
 
@@ -57,7 +57,7 @@ app.get('/uploads/:year/:month/:day/:image', (req, res) => {
 */
 app.get('/full/:year/:month/:day/:image', (req, res) => {
   res.header('Access-Control-Allow-Origin', '*')
-  res.type('image/png')
+  // res.type('image/png')
   res.sendFile(path.join(__dirname, dir, req.params.year, req.params.month, req.params.day, req.params.image))
 })
 
